@@ -25,12 +25,18 @@
         </div>
 
         <main class="container">
-            <!-- Intro message -->
+            <!-- Intro message + Letter Buttons-->
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-12 text-center">
                     <p class="intro-text text-center">Can you guess what letter I am thinking of?</p>
+                    <i>Choose a letter by clicking a button, or type a key.</i>
                 </div>
+                
+                <!-- Letters to click on -->
+                <div class="col-lg-12" id="letter-buttons-container"></div>
+
             </div>
+            
 
             <!-- What the user has guessed so far -->
             <div class="row">
@@ -44,7 +50,6 @@
             <!-- Score Tracker -->
             <div class="row">
                 <!-- Wins, Losses, # Guesses Left -->
-
                 <div class="col-lg-4 text-center">Wins: <span id="wins"> </span></div>
                 <div class="col-lg-4 text-center">Losses: <span id="losses"> </span></div>
                 <div class="col-lg-4 text-center">Guesses Left: <span id="guesses-left"></span></div>

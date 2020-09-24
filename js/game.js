@@ -28,7 +28,8 @@ const winsElement = () => (document.getElementById('wins').innerHTML = wins);
 const lossesElement = () => (document.getElementById('losses').innerHTML = losses);
 const guessesLeftElement = () => (document.getElementById('guesses-left').innerHTML = guessesLeft);
 const userGuessesElement = () => (document.getElementById('user-guess').innerHTML = userGuesses)
-
+// "<button class='btn'>A</button>"
+const lettersContainerElements = (string) => (document.getElementById('letter-buttons-container').innerHTML = string);
 
 
 
@@ -43,9 +44,6 @@ const displayMessage = message => alert(message);
 
 
 
-
-
-
 // Initialize game function
 const initializeGame = () => {
 // A - on first load
@@ -57,16 +55,17 @@ const initializeGame = () => {
 //      show guesses left from a new game
 
 // check if user has already played and is resetting
-if(userGuesses.length > 0 && guessesLeft !== 10) {
-    userGuesses = [];
-    guessesLeft = 10;
-}
+    if(userGuesses.length > 0 && guessesLeft !== 10) {
+        userGuesses = [];
+        guessesLeft = 10;
+    }
 
-winsElement(); // no matter what the value is for win/losses, it will always update the right amount
-lossesElement();
-guessesLeftElement();
-userGuessesElement();
-computerChoice();
+    winsElement(); // no matter what the value is for win/losses, it will always update the right amount
+    lossesElement();
+    guessesLeftElement();
+    userGuessesElement();
+    computerChoice();
+    lettersContainerElements(renderLetters());
 }
 
 
@@ -75,45 +74,57 @@ const takeTurn = userChoice => {
     userGuesses.push(userChoice);
     userGuessesElement();   
     guessesLeftElement();
-
 }
 
-
-// Event Listeners
-
-document.addEventListener('keypress', function(event) {
-    /* listen for user to type key in keyboard
-    */
-   const userChoice = event.key.toLowerCase();
-
-// exclude numbers
-// exclude special chars
-   if(!letters.includes(userChoice)) {
-//      show error msg
-    displayMessage("Only letters allowed");
-    } else if(userGuesses.includes(userChoice)) {
-//      show error msg
-    displayMessage(`Already guessed '${userChoice}'`);
-    } else {
-        // only alpha chars
-        // decrement # of guesses
-        takeTurn(userChoice);
-    };
-    // check against random letter chosen by PC
+const checkWinCondition = userChoice => {
     if(randomLetter === userChoice) {
         //      if right -> win, then increment wins, show win msg
         wins += 1;
         displayMessage('Congrats');
         initializeGame();
         
-    } else if(guessesLeft === 0) {
         //      check if # guess !0
-        //          if no guesses left, losses +1 to a loss based on game end
+    } else if(guessesLeft === 0) {
+        //      if no guesses left, losses +1 to a loss based on game end
         losses += 1;
         displayMessage(":(")
         initializeGame();
+        //              a: ['a', 'b', ... 10th element] <- at the time of the loss condition
     }
-    //              a: ['a', 'b', ... 10th element] <- at the time of the loss condition
+}
+
+const checkForValidTurn = userChoice => {
+    // exclude numbers
+// exclude special chars
+   if(!letters.includes(userChoice)) {
+    //      show error msg
+        displayMessage("Only letters allowed");
+        } else if(userGuesses.includes(userChoice)) {
+    //      show error msg
+        displayMessage(`Already guessed '${userChoice}'`);
+        } else {
+            // only alpha chars
+            // decrement # of guesses
+        takeTurn(userChoice);
+        };
+}
+
+const renderLetters = () => {
+    let letterButtons = "";
+    letters.forEach(
+        function(letter) {
+            letterButtons += `<button type="button" class="btn btn-outline-info">${letter}</button>`;
+        })
+    return letterButtons;
+};
+
+// Event Listeners
+
+// listen for user to type key in keyboard
+document.addEventListener('keypress', function(event) {
+   const userChoice = event.key.toLowerCase();
+    checkForValidTurn(userChoice);
+    checkWinCondition(userChoice);
 });
 
 // Initiialize Application
