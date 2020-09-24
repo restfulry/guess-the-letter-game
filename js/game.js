@@ -70,7 +70,13 @@ computerChoice();
 }
 
 
+const takeTurn = userChoice => {
+    guessesLeft -= 1;
+    userGuesses.push(userChoice);
+    userGuessesElement();   
+    guessesLeftElement();
 
+}
 
 
 // Event Listeners
@@ -91,10 +97,7 @@ document.addEventListener('keypress', function(event) {
     } else {
         // only alpha chars
         // decrement # of guesses
-        guessesLeft -= 1;
-        userGuesses.push(userChoice);
-        userGuessesElement();   
-        guessesLeftElement();
+        takeTurn(userChoice);
     };
     // check against random letter chosen by PC
     if(randomLetter === userChoice) {
